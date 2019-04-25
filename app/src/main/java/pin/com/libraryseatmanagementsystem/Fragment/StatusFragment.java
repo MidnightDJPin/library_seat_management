@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import pin.com.libraryseatmanagementsystem.Bean.Reader;
 import pin.com.libraryseatmanagementsystem.Interface.OnFragmentInteractionListener;
 import pin.com.libraryseatmanagementsystem.R;
 
@@ -20,7 +21,7 @@ import pin.com.libraryseatmanagementsystem.R;
  * Use the {@link StatusFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class StatusFragment extends Fragment {
+public class StatusFragment extends BaseFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -29,6 +30,7 @@ public class StatusFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private Reader reader;
 
     private OnFragmentInteractionListener mListener;
 
@@ -70,11 +72,9 @@ public class StatusFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_status, container, false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            //mListener.onFragmentInteraction(uri);
-        }
+    @Override
+    public void refreshReader(Reader newReader) {
+        reader = newReader;
     }
 
     @Override

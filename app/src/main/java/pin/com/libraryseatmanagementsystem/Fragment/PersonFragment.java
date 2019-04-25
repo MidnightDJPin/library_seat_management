@@ -1,14 +1,23 @@
 package pin.com.libraryseatmanagementsystem.Fragment;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import pin.com.libraryseatmanagementsystem.Activity.LoginActivity;
+import pin.com.libraryseatmanagementsystem.Bean.Reader;
+import pin.com.libraryseatmanagementsystem.Interface.OnFragmentCallbackListener;
 import pin.com.libraryseatmanagementsystem.Interface.OnFragmentInteractionListener;
 import pin.com.libraryseatmanagementsystem.R;
 
@@ -20,13 +29,23 @@ import pin.com.libraryseatmanagementsystem.R;
  * Use the {@link PersonFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PersonFragment extends Fragment {
+public class PersonFragment extends BaseFragment implements OnFragmentCallbackListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    private ConstraintLayout personInfoLayout;
+    private TextView name;
+    private TextView account;
+    private TextView checkOrder;
+    private Button banButton;
+    private Button lrButton;
+
+
     // TODO: Rename and change types of parameters
+
+    private Reader reader;
     private String mParam1;
     private String mParam2;
 
@@ -40,15 +59,15 @@ public class PersonFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
+     * @param reader Parameter 1.
      * @param param2 Parameter 2.
      * @return A new instance of fragment PersonFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static PersonFragment newInstance(String param1, String param2) {
+    public static PersonFragment newInstance(Reader reader, String param2) {
         PersonFragment fragment = new PersonFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putSerializable("reader", reader);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
@@ -58,7 +77,7 @@ public class PersonFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            reader = (Reader) getArguments().getSerializable("reader");
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
@@ -67,15 +86,48 @@ public class PersonFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_person, container, false);
+        View thisView = inflater.inflate(R.layout.fragment_person, container, false);
+        personInfoLayout = thisView.findViewById(R.id.person_info_layout);
+        personInfoLayout.setOnClickListener(personInfo);
+        name = thisView.findViewById(R.id.name);
+        name.setText("姓名：" + ((reader.getRname() == null)?"":reader.getRname()));
+        account = thisView.findViewById(R.id.account);
+        account.setText("账号：" + reader.getAccount());
+        checkOrder = thisView.findViewById(R.id.check_order);
+        banButton = thisView.findViewById(R.id.banButton);
+        banButton.setVisibility((reader.isAdmin())?View.VISIBLE:View.INVISIBLE);
+        banButton.setOnClickListener(ban);
+        lrButton = thisView.findViewById(R.id.lr_button);
+        Resources resources = getResources();
+        if (reader.getRid() == 0) {
+            lrButton.setBackground(resources.getDrawable(R.drawable.button_shape3));
+            lrButton.setText("登陆");
+        } else {
+            lrButton.setBackground(resources.getDrawable(R.drawable.button_shape4));
+            lrButton.setText("退出账号");
+        }
+        lrButton.setOnClickListener(lr);
+        return thisView;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            //mListener.onFragmentInteraction(uri);
+    @Override
+    public void refreshReader(Reader newReader) {
+        reader = newReader;
+        name.setText("姓名：" + ((reader.getRname() == null)?"":reader.getRname()));
+        account.setText("账号：" + reader.getAccount());
+        banButton.setVisibility((reader.isAdmin())?View.VISIBLE:View.INVISIBLE);
+        Resources resources = getResources();
+        if (reader.getRid() == 0) {
+            lrButton.setBackground(resources.getDrawable(R.drawable.button_shape3));
+            lrButton.setText("登陆");
+        } else {
+            lrButton.setBackground(resources.getDrawable(R.drawable.button_shape4));
+            lrButton.setText("退出账号");
         }
     }
+
+
+
 
     @Override
     public void onAttach(Context context) {
@@ -94,15 +146,26 @@ public class PersonFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
 
+
+    private View.OnClickListener personInfo = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Toast.makeText(getActivity(), "个人信息", Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    private View.OnClickListener ban = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Toast.makeText(getActivity(), "封禁管理", Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    private View.OnClickListener lr = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            mListener.login();
+        }
+    };
 }

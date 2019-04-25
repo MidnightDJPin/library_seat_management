@@ -3,6 +3,7 @@ package pin.com.libraryseatmanagementsystem.Net;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import pin.com.libraryseatmanagementsystem.Bean.Reader;
@@ -54,5 +55,17 @@ public class NetworkConnection {
     public Call<List<Seat>> getSeats() {
         LibraryService service = retrofit.create(LibraryService.class);
         return service.getSeats();
+    }
+
+    public Call<Reader> login(String json) {
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json);
+        LibraryService service = retrofit.create(LibraryService.class);
+        return service.login(requestBody);
+    }
+
+    public Call<Reader> register(String json) {
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json);
+        LibraryService service = retrofit.create(LibraryService.class);
+        return service.register(requestBody);
     }
 }

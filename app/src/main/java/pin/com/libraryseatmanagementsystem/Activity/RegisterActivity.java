@@ -1,6 +1,9 @@
 package pin.com.libraryseatmanagementsystem.Activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -57,7 +60,7 @@ public class RegisterActivity extends AppCompatActivity {
                     reader.setPassword(MD5.MD5Util(passwordString));
                     Gson gson = new Gson();
                     String json = gson.toJson(reader);
-                    /*Call<Reader> registerCall = network.register(json);
+                    Call<Reader> registerCall = network.register(json);
                     registerCall.enqueue(new Callback<Reader>() {
                         @Override
                         public void onResponse(Call<Reader> call, Response<Reader> response) {
@@ -80,7 +83,7 @@ public class RegisterActivity extends AppCompatActivity {
                         public void onFailure(Call<Reader> call, Throwable t) {
                             Toast.makeText(RegisterActivity.this, "网络错误", Toast.LENGTH_SHORT).show();
                         }
-                    });*/
+                    });
                 }
             }
         });
@@ -88,8 +91,7 @@ public class RegisterActivity extends AppCompatActivity {
         toLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
     }

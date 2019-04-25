@@ -6,12 +6,14 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import java.util.List;
 
+import pin.com.libraryseatmanagementsystem.Fragment.BaseFragment;
+
 public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
 
-    private List<Fragment> list;
+    private List<BaseFragment> list;
     private FragmentManager fragmentManager;
 
-    public MyFragmentPagerAdapter(FragmentManager fm, List<Fragment> list) {
+    public MyFragmentPagerAdapter(FragmentManager fm, List<BaseFragment> list) {
         super(fm);
         fragmentManager = fm;
         this.list = list;

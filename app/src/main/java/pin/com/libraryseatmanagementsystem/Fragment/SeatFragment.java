@@ -15,10 +15,12 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import pin.com.libraryseatmanagementsystem.Bean.Reader;
 import pin.com.libraryseatmanagementsystem.Interface.OnFragmentInteractionListener;
 import pin.com.libraryseatmanagementsystem.R;
 
@@ -30,14 +32,17 @@ import pin.com.libraryseatmanagementsystem.R;
  * Use the {@link SeatFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SeatFragment extends Fragment {
+public class SeatFragment extends BaseFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    /*
     private static final String ARG_PARAM1 = "param1";
+    */
+
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
+    private Reader reader;
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
@@ -77,15 +82,15 @@ public class SeatFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
+     * @param reader Parameter 1.
      * @param param2 Parameter 2.
      * @return A new instance of fragment SeatFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SeatFragment newInstance(String param1, String param2) {
+    public static SeatFragment newInstance(Reader reader, String param2) {
         SeatFragment fragment = new SeatFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putSerializable("reader", reader);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
@@ -95,7 +100,7 @@ public class SeatFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            reader = (Reader) getArguments().getSerializable("reader");
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
@@ -137,7 +142,7 @@ public class SeatFragment extends Fragment {
                 view.setTag(STATUS_AVAILABLE);
                 layout.addView(view);
                 seatViewList.add(view);
-                //view.setOnClickListener(this);
+                view.setOnClickListener(onSeatClickListener);
             } else if (seatsInt[i] == 0) {
                 TextView view = new TextView(getActivity());
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(seatSize, seatSize);
@@ -156,11 +161,9 @@ public class SeatFragment extends Fragment {
         return fragmentView;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            //mListener.onFragmentInteraction(uri);
-        }
+    @Override
+    public void refreshReader(Reader newReader) {
+        reader = newReader;
     }
 
     @Override
@@ -179,6 +182,17 @@ public class SeatFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+
+    public View.OnClickListener onSeatClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (reader.getRid() == 0) {
+                Toast.makeText(getActivity(), "请先登陆后再进行相应操作", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getActivity(), "选择了座位" + v.getId(), Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
 
     /**
      * This interface must be implemented by activities that contain this
