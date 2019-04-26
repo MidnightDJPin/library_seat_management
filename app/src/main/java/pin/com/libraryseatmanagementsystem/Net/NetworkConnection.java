@@ -50,6 +50,9 @@ public class NetworkConnection {
 
         @GET("SeatServlet")
         Call<List<Seat>> getSeats();
+
+        @POST("UpdateReader")
+        Call<Reader> updateReader(@Body RequestBody requestBody);
     }
 
     public Call<List<Seat>> getSeats() {
@@ -67,5 +70,11 @@ public class NetworkConnection {
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json);
         LibraryService service = retrofit.create(LibraryService.class);
         return service.register(requestBody);
+    }
+
+    public Call<Reader> updateReader(String json) {
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json);
+        LibraryService service = retrofit.create(LibraryService.class);
+        return service.updateReader(requestBody);
     }
 }

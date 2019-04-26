@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="pin.com.libraryseatmanagementsystem">
 
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,7 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Activity.MainActivity"
+        <activity
+            android:name=".Activity.MainActivity"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,10 +21,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.LoginActivity"
-            android:launchMode="singleTop"/>
-        <activity android:name=".Activity.RegisterActivity"
-            android:launchMode="singleTop"/>
+        <activity
+            android:name=".Activity.LoginActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".Activity.RegisterActivity"
+            android:launchMode="singleTop" />
+        <activity android:name=".Activity.UpdateActivity"></activity>
     </application>
 
 </manifest>

@@ -148,6 +148,7 @@ public class PersonFragment extends BaseFragment implements OnFragmentCallbackLi
 
 
 
+    //TODO:implement the click events
     private View.OnClickListener personInfo = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
