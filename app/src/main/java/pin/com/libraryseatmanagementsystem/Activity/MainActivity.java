@@ -12,6 +12,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,8 +52,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
         initAccount();
         initView();
-
-
+        if (!reader.getAccount().equals(""))
+            getReader();
     }
 
     private void initAccount() {
@@ -75,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         FragmentManager fm = getSupportFragmentManager();
         adapter = new MyFragmentPagerAdapter(fm, fragments);
 
+        viewPager.setOffscreenPageLimit(3);
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(0);
 
@@ -84,8 +87,42 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
     @Override
     public void login() {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.clear();
+        reader = new Reader();
+        reader.setRid(0);
+        sendReader();
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivityForResult(intent, 114);
+    }
+
+    private void getReader() {
+        Gson gson = new Gson();
+        String json = gson.toJson(reader);
+        Call<Reader> readerCall = connection.login(json);
+        readerCall.enqueue(new Callback<Reader>() {
+            @Override
+            public void onResponse(Call<Reader> call, Response<Reader> response) {
+                if (response.code() == 200) {
+                    reader = response.body();
+                    Toast.makeText(MainActivity.this, "欢迎回来！", Toast.LENGTH_SHORT).show();
+                    sendReader();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Reader> call, Throwable t) {
+
+            }
+        });
+    }
+
+    void sendReader() {
+        if (reader.getRid() != 0) {
+            fragments.get(0).refreshReader(reader);
+            fragments.get(1).refreshReader(reader);
+            fragments.get(2).refreshReader(reader);
+        }
     }
 
     @Override
@@ -94,9 +131,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         if (requestCode == 114 && resultCode == 514) {
             Bundle bundle = data.getExtras();
             reader = (Reader) bundle.getSerializable("reader");
-            fragments.get(0).refreshReader(reader);
-            fragments.get(1).refreshReader(reader);
-            fragments.get(2).refreshReader(reader);
+            sendReader();
         }
     }
 
