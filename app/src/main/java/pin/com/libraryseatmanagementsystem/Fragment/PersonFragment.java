@@ -90,9 +90,9 @@ public class PersonFragment extends BaseFragment implements OnFragmentCallbackLi
         personInfoLayout = thisView.findViewById(R.id.person_info_layout);
         personInfoLayout.setOnClickListener(personInfo);
         name = thisView.findViewById(R.id.name);
-        name.setText("姓名：" + ((reader.getRname() == null)?"":reader.getRname()));
+        //name.setText("姓名：" + ((reader.getRname() == null)?"":reader.getRname()));
         account = thisView.findViewById(R.id.account);
-        account.setText("账号：" + reader.getAccount());
+        //account.setText("账号：" + reader.getAccount());
         checkOrder = thisView.findViewById(R.id.check_order);
         banButton = thisView.findViewById(R.id.banButton);
         banButton.setVisibility((reader.isAdmin())?View.VISIBLE:View.INVISIBLE);

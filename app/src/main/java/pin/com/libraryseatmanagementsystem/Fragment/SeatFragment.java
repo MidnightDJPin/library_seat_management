@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
+import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.util.TypedValue;
@@ -21,8 +22,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pin.com.libraryseatmanagementsystem.Bean.Reader;
+import pin.com.libraryseatmanagementsystem.Bean.Seat;
 import pin.com.libraryseatmanagementsystem.Interface.OnFragmentInteractionListener;
+import pin.com.libraryseatmanagementsystem.Net.NetworkConnection;
 import pin.com.libraryseatmanagementsystem.R;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,21 +39,15 @@ import pin.com.libraryseatmanagementsystem.R;
  * create an instance of this fragment.
  */
 public class SeatFragment extends BaseFragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    /*
-    private static final String ARG_PARAM1 = "param1";
-    */
-
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
     private Reader reader;
-    private String mParam2;
+    private List<Seat> seats = new ArrayList<>(336);
+
+    private NetworkConnection connection = NetworkConnection.getInstance();
 
     private OnFragmentInteractionListener mListener;
 
-    ViewGroup layout;
+    ViewGroup HV_layout;
+    View fragmentView;
     private int[] seatsInt = {-1,  1,  2,  3,   7,  8,  9, 0,  13, 14, 15, 0,  19, 20, 0,  23, 24, 0, 157,158, 0, 161,162, 0, 165,166, 0, 181, 182, 0, 185, 186, 0, 189,190,191, 0, 195,196,198, 201,202,203,-1,
             4,  5,  6,  10, 11, 12, 0,  16, 17, 18, 0,  21, 22, 0,  25, 26, 0, 159,160, 0, 163,164, 0, 167,168, 0, 183, 184, 0, 187, 188, 0, 192,193,194, 0, 198,199,200, 204,205,206,-1,
             0,  0,  0,   0,  0,  0, 0,   0,  0,  0, 0,   0,  0, 0,   0,  0, 0,   0,  0, 0,   0,  0, 0,   0,  0, 0,   0,   0, 0,   0,   0, 0,   0,  0,  0, 0,   0,  0,  0,   0,  0,  0,-1,
@@ -66,6 +66,7 @@ public class SeatFragment extends BaseFragment {
             131,132,133, 137,138,139, 0, 143,144,145, 0, 149,150, 0, 153,154, 0,   0,  0, 0,   0,  0, 0,   0,  0, 0, 311, 312, 0, 315, 316, 0, 319,320,321, 0, 325,326,327, 331,332,333,-1,
             134,135,136, 140,141,142, 0, 146,147,148, 0, 151,152, 0, 155,156, 0,   0,  0, 0,   0,  0, 0,   0,  0, 0, 313, 314, 0, 317, 318, 0, 322,323,324, 0, 328,329,330, 334,335,336,-1
     };
+    private int[] seatIndex = new int[336];
     List<TextView> seatViewList = new ArrayList<>();
     int seatSize = 100;
     int seatGaping = 10;
@@ -83,15 +84,13 @@ public class SeatFragment extends BaseFragment {
      * this fragment using the provided parameters.
      *
      * @param reader Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment SeatFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SeatFragment newInstance(Reader reader, String param2) {
+    public static SeatFragment newInstance(Reader reader) {
         SeatFragment fragment = new SeatFragment();
         Bundle args = new Bundle();
         args.putSerializable("reader", reader);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -101,7 +100,6 @@ public class SeatFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             reader = (Reader) getArguments().getSerializable("reader");
-            mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -110,15 +108,15 @@ public class SeatFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View fragmentView = inflater.inflate(R.layout.fragment_seat, container, false);
-        layout = fragmentView.findViewById(R.id.layoutSeat);
+        fragmentView = inflater.inflate(R.layout.fragment_seat, container, false);
+        HV_layout = fragmentView.findViewById(R.id.layoutSeat);
 
         LinearLayout layoutSeat = new LinearLayout(getActivity());
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutSeat.setOrientation(LinearLayout.VERTICAL);
         layoutSeat.setLayoutParams(params);
         layoutSeat.setPadding(8 * seatGaping, 8 * seatGaping, 8 * seatGaping, 8 * seatGaping);
-        layout.addView(layoutSeat);
+        HV_layout.addView(layoutSeat);
 
         LinearLayout layout = null;
 
@@ -142,6 +140,9 @@ public class SeatFragment extends BaseFragment {
                 view.setTag(STATUS_AVAILABLE);
                 layout.addView(view);
                 seatViewList.add(view);
+                //xx号座位在seatViewLis中的索引存放在seatIndex中 获取TextView的方法：seatViewList.get(seatIndex[rid - 1])
+                seatIndex[seatsInt[i] - 1] = seatViewList.size() - 1;
+
                 view.setOnClickListener(onSeatClickListener);
             } else if (seatsInt[i] == 0) {
                 TextView view = new TextView(getActivity());
@@ -152,18 +153,65 @@ public class SeatFragment extends BaseFragment {
                 view.setText("");
                 layout.addView(view);
             }
+            HV_layout.setVisibility(View.INVISIBLE);
         }
 
-        ConstraintLayout loading = fragmentView.findViewById(R.id.loading_layout);
-        loading.setVisibility(View.INVISIBLE);
-        LinearLayout seatType = fragmentView.findViewById(R.id.seat_type);
-        seatType.setVisibility(View.VISIBLE);
         return fragmentView;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (reader.getRid() > 0)
+            setSeat();
+    }
+
+    private void setSeat() {
+        Call<List<Seat>> seatCall = connection.getSeats();
+        seatCall.enqueue(new Callback<List<Seat>>() {
+            @Override
+            public void onResponse(Call<List<Seat>> call, Response<List<Seat>> response) {
+                if (response.code() == 200) {
+                    seats.clear();
+                    seats.addAll(response.body());
+                    for (int i = 0; i < seats.size(); i++) {
+                        int sid = seats.get(i).getSid();
+                        int sstate = seats.get(i).getSstate();
+                        TextView tv = seatViewList.get(seatIndex[sid - 1]);
+                        if (sstate == 1) {
+                            tv.setBackgroundResource(R.drawable.ic_seats_available);
+                            tv.setTextColor(Color.BLACK);
+                            tv.setTag(STATUS_AVAILABLE);
+                        } else {
+                            tv.setTextColor(Color.WHITE);
+                            if (sstate == 0) {
+                                tv.setBackgroundResource(R.drawable.ic_seats_disable);
+                                tv.setTag(STATUS_DISABLE);
+                            } else {
+                                tv.setBackgroundResource(R.drawable.ic_seats_using);
+                                tv.setTag(STATUS_USING);
+                            }
+                        }
+                    }
+                    HV_layout.setVisibility(View.VISIBLE);
+                    ConstraintLayout loading = fragmentView.findViewById(R.id.loading_layout);
+                    loading.setVisibility(View.INVISIBLE);
+                    LinearLayout seatType = fragmentView.findViewById(R.id.seat_type);
+                    seatType.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Seat>> call, Throwable t) {
+
+            }
+        });
     }
 
     @Override
     public void refreshReader(Reader newReader) {
         reader = newReader;
+        setSeat();
     }
 
     @Override

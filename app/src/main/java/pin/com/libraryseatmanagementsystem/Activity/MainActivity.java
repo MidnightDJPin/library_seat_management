@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         radioGroup = findViewById(R.id.radio_group);
 
         fragments = new ArrayList<>(3);
-        fragments.add(SeatFragment.newInstance(reader, ""));
+        fragments.add(SeatFragment.newInstance(reader));
         fragments.add(StatusFragment.newInstance("", ""));
         fragments.add(PersonFragment.newInstance(reader, ""));
 
@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     public void login() {
         SharedPreferences.Editor editor = preferences.edit();
         editor.clear();
+        editor.apply();
         reader = new Reader();
         reader.setRid(0);
         sendReader();
@@ -112,7 +113,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
             @Override
             public void onFailure(Call<Reader> call, Throwable t) {
-
             }
         });
     }
