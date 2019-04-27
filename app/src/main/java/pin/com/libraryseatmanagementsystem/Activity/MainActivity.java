@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         fragments = new ArrayList<>(3);
         fragments.add(SeatFragment.newInstance(reader));
         fragments.add(StatusFragment.newInstance("", ""));
-        fragments.add(PersonFragment.newInstance(reader, ""));
+        fragments.add(PersonFragment.newInstance(reader));
 
         FragmentManager fm = getSupportFragmentManager();
         adapter = new MyFragmentPagerAdapter(fm, fragments);
@@ -94,6 +94,15 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         reader.setRid(0);
         sendReader();
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        startActivityForResult(intent, 114);
+    }
+
+    @Override
+    public void updateReader() {
+        Intent intent = new Intent(MainActivity.this, UpdateActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("reader", reader);
+        intent.putExtras(bundle);
         startActivityForResult(intent, 114);
     }
 

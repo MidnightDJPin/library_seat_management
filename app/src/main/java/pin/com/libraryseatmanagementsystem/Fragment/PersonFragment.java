@@ -30,10 +30,7 @@ import pin.com.libraryseatmanagementsystem.R;
  * create an instance of this fragment.
  */
 public class PersonFragment extends BaseFragment implements OnFragmentCallbackListener{
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+
 
     private ConstraintLayout personInfoLayout;
     private TextView name;
@@ -43,11 +40,10 @@ public class PersonFragment extends BaseFragment implements OnFragmentCallbackLi
     private Button lrButton;
 
 
-    // TODO: Rename and change types of parameters
+
 
     private Reader reader;
-    private String mParam1;
-    private String mParam2;
+
 
     private OnFragmentInteractionListener mListener;
 
@@ -60,15 +56,15 @@ public class PersonFragment extends BaseFragment implements OnFragmentCallbackLi
      * this fragment using the provided parameters.
      *
      * @param reader Parameter 1.
-     * @param param2 Parameter 2.
+
      * @return A new instance of fragment PersonFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static PersonFragment newInstance(Reader reader, String param2) {
+
+    public static PersonFragment newInstance(Reader reader) {
         PersonFragment fragment = new PersonFragment();
         Bundle args = new Bundle();
         args.putSerializable("reader", reader);
-        args.putString(ARG_PARAM2, param2);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -78,7 +74,7 @@ public class PersonFragment extends BaseFragment implements OnFragmentCallbackLi
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             reader = (Reader) getArguments().getSerializable("reader");
-            mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
     }
 
@@ -152,7 +148,11 @@ public class PersonFragment extends BaseFragment implements OnFragmentCallbackLi
     private View.OnClickListener personInfo = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Toast.makeText(getActivity(), "个人信息", Toast.LENGTH_SHORT).show();
+            if (reader.getRid() >0) {
+                mListener.updateReader();
+            } else {
+                Toast.makeText(getActivity(), "请登陆后再完成相应操作", Toast.LENGTH_SHORT).show();
+            }
         }
     };
 

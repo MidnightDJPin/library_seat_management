@@ -17,14 +17,14 @@
     <RadioGroup
         android:id="@+id/radio_group"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
 
         <RadioButton
             android:id="@+id/seat_button"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="60dp"
             android:layout_weight="1"
             android:checked="true"
             android:button="@null"
@@ -35,7 +35,7 @@
         <RadioButton
             android:id="@+id/state_button"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="60dp"
             android:layout_weight="1"
             android:button="@null"
             android:background="@drawable/radio2"
@@ -45,7 +45,7 @@
         <RadioButton
             android:id="@+id/person_button"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="60dp"
             android:layout_weight="1"
             android:button="@null"
             android:background="@drawable/radio3"

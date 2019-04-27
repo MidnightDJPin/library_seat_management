@@ -79,7 +79,6 @@ public class UpdateActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<Reader> call, Response<Reader> response) {
                     if (response.code()==200) {
-                        reader = response.body();
                         Intent intent = new Intent();
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("reader", reader);
@@ -92,7 +91,7 @@ public class UpdateActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<Reader> call, Throwable t) {
-
+                    Toast.makeText(UpdateActivity.this, "服务器错误", Toast.LENGTH_SHORT).show();
                 }
             });
         }
