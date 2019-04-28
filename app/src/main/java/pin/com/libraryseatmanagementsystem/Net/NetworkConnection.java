@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
+import pin.com.libraryseatmanagementsystem.Bean.Order;
 import pin.com.libraryseatmanagementsystem.Bean.Reader;
 import pin.com.libraryseatmanagementsystem.Bean.Seat;
 import retrofit2.Call;
@@ -15,6 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 public class NetworkConnection {
     private OkHttpClient bulid;
@@ -53,6 +55,9 @@ public class NetworkConnection {
 
         @POST("UpdateReader")
         Call<Reader> updateReader(@Body RequestBody requestBody);
+
+        @GET("OrderServlet")
+        Call<List<Order>> getOrders(@Query("rid") String rid, @Query("sid") String sid, @Query("time") String time);
     }
 
     public Call<List<Seat>> getSeats() {
@@ -76,5 +81,10 @@ public class NetworkConnection {
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json);
         LibraryService service = retrofit.create(LibraryService.class);
         return service.updateReader(requestBody);
+    }
+
+    public Call<List<Order>> getOrders(String rid, String sid, String time) {
+        LibraryService service = retrofit.create(LibraryService.class);
+        return service.getOrders(rid, sid, time);
     }
 }

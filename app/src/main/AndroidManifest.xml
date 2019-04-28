@@ -27,7 +27,9 @@
         <activity
             android:name=".Activity.RegisterActivity"
             android:launchMode="singleTop" />
-        <activity android:name=".Activity.UpdateActivity"></activity>
+        <activity android:name=".Activity.UpdateActivity" />
+        <activity android:name=".Activity.MyOrderActivity" />
+        <activity android:name=".Activity.BanActivity"></activity>
     </application>
 
 </manifest>

@@ -34,9 +34,9 @@
             android:id="@+id/login_account"
             android:layout_width="300dp"
             android:layout_height="40dp"
-
             android:hint="  账号"
-            android:inputType="text"
+            android:inputType="textVisiblePassword"
+            android:digits="@string/inputtype_digits"
             android:maxLength="15"
             android:textSize="15sp"
             android:textCursorDrawable="@null"

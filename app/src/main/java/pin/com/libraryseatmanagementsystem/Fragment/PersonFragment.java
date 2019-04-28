@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import pin.com.libraryseatmanagementsystem.Activity.LoginActivity;
+import pin.com.libraryseatmanagementsystem.Activity.MyOrderActivity;
 import pin.com.libraryseatmanagementsystem.Bean.Reader;
 import pin.com.libraryseatmanagementsystem.Interface.OnFragmentCallbackListener;
 import pin.com.libraryseatmanagementsystem.Interface.OnFragmentInteractionListener;
@@ -90,6 +91,7 @@ public class PersonFragment extends BaseFragment implements OnFragmentCallbackLi
         account = thisView.findViewById(R.id.account);
         //account.setText("账号：" + reader.getAccount());
         checkOrder = thisView.findViewById(R.id.check_order);
+        checkOrder.setOnClickListener(orderListener);
         banButton = thisView.findViewById(R.id.banButton);
         banButton.setVisibility((reader.isAdmin())?View.VISIBLE:View.INVISIBLE);
         banButton.setOnClickListener(ban);
@@ -144,12 +146,26 @@ public class PersonFragment extends BaseFragment implements OnFragmentCallbackLi
 
 
 
-    //TODO:implement the click events
     private View.OnClickListener personInfo = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             if (reader.getRid() >0) {
                 mListener.updateReader();
+            } else {
+                Toast.makeText(getActivity(), "请登陆后再完成相应操作", Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
+
+    private View.OnClickListener orderListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (reader.getRid() > 0) {
+                Intent intent = new Intent(getActivity(), MyOrderActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("reader", reader);
+                intent.putExtras(bundle);
+                startActivity(intent);
             } else {
                 Toast.makeText(getActivity(), "请登陆后再完成相应操作", Toast.LENGTH_SHORT).show();
             }

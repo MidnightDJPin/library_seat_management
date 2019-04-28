@@ -2,7 +2,6 @@ package pin.com.libraryseatmanagementsystem.Activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -19,7 +18,6 @@ import java.util.List;
 
 import pin.com.libraryseatmanagementsystem.Adapter.MyFragmentPagerAdapter;
 import pin.com.libraryseatmanagementsystem.Bean.Reader;
-import pin.com.libraryseatmanagementsystem.Bean.Seat;
 import pin.com.libraryseatmanagementsystem.Fragment.BaseFragment;
 import pin.com.libraryseatmanagementsystem.Fragment.PersonFragment;
 import pin.com.libraryseatmanagementsystem.Fragment.SeatFragment;
