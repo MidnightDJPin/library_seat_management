@@ -1,5 +1,7 @@
 package pin.com.libraryseatmanagementsystem.Net;
 
+import android.support.annotation.RequiresPermission;
+
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -53,6 +55,9 @@ public class NetworkConnection {
         @GET("SeatServlet")
         Call<List<Seat>> getSeats();
 
+        @GET("UpdateReader")
+        Call<Reader> banReader(@Query("account") String account, @Query("days") int days, @Query("ban") boolean ban);
+
         @POST("UpdateReader")
         Call<Reader> updateReader(@Body RequestBody requestBody);
 
@@ -86,5 +91,10 @@ public class NetworkConnection {
     public Call<List<Order>> getOrders(String rid, String sid, String time) {
         LibraryService service = retrofit.create(LibraryService.class);
         return service.getOrders(rid, sid, time);
+    }
+
+    public Call<Reader> banReader(String account, int days, boolean ban) {
+        LibraryService service = retrofit.create(LibraryService.class);
+        return service.banReader(account, days, ban);
     }
 }

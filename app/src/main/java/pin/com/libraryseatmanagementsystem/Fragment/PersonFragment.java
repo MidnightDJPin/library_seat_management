@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import pin.com.libraryseatmanagementsystem.Activity.BanActivity;
 import pin.com.libraryseatmanagementsystem.Activity.LoginActivity;
 import pin.com.libraryseatmanagementsystem.Activity.MyOrderActivity;
 import pin.com.libraryseatmanagementsystem.Bean.Reader;
@@ -175,7 +176,8 @@ public class PersonFragment extends BaseFragment implements OnFragmentCallbackLi
     private View.OnClickListener ban = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Toast.makeText(getActivity(), "封禁管理", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getActivity(), BanActivity.class);
+            startActivity(intent);
         }
     };
 
