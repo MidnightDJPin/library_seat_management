@@ -243,6 +243,10 @@ public class SeatFragment extends BaseFragment {
                 Toast.makeText(getActivity(), "该座位不可用", Toast.LENGTH_SHORT).show();
             } else {
                 Intent intent = new Intent(getActivity(), SeatOrderActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("reader", reader);
+                bundle.putSerializable("seat", seats.get(vId - 1));
+                intent.putExtras(bundle);
                 startActivity(intent);
             }
         }

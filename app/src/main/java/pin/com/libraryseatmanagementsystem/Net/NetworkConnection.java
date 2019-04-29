@@ -9,6 +9,7 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import pin.com.libraryseatmanagementsystem.Bean.Order;
+import pin.com.libraryseatmanagementsystem.Bean.OrderInfo;
 import pin.com.libraryseatmanagementsystem.Bean.Reader;
 import pin.com.libraryseatmanagementsystem.Bean.Seat;
 import retrofit2.Call;
@@ -16,6 +17,7 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
@@ -62,7 +64,16 @@ public class NetworkConnection {
         Call<Reader> updateReader(@Body RequestBody requestBody);
 
         @GET("OrderServlet")
-        Call<List<Order>> getOrders(@Query("rid") String rid, @Query("sid") String sid, @Query("time") String time);
+        Call<List<Order>> getOrders(@Query("rid") String rid, @Query("sid") String sid);
+
+        @GET("OrderServlet")
+        Call<List<OrderInfo>> getSeatOrders(@Query("rid") String rid, @Query("sid") String sid);
+
+        @POST("OrderServlet")
+        Call<Order> sendOrder(@Body RequestBody requestBody);
+
+        @DELETE("OrderServlet")
+        Call<Order> deleteOrder(@Query("oid")String oid);
     }
 
     public Call<List<Seat>> getSeats() {
@@ -88,13 +99,28 @@ public class NetworkConnection {
         return service.updateReader(requestBody);
     }
 
-    public Call<List<Order>> getOrders(String rid, String sid, String time) {
+    public Call<List<Order>> getOrders(String rid, String sid) {
         LibraryService service = retrofit.create(LibraryService.class);
-        return service.getOrders(rid, sid, time);
+        return service.getOrders(rid, sid);
+    }
+    public Call<List<OrderInfo>> getSeatOrders(String rid, String sid) {
+        LibraryService service = retrofit.create(LibraryService.class);
+        return service.getSeatOrders(rid, sid);
     }
 
     public Call<Reader> banReader(String account, int days, boolean ban) {
         LibraryService service = retrofit.create(LibraryService.class);
         return service.banReader(account, days, ban);
+    }
+
+    public Call<Order> sendOrder(String json) {
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json);
+        LibraryService service = retrofit.create(LibraryService.class);
+        return service.sendOrder(requestBody);
+    }
+
+    public Call<Order> deleteOrder(String oid) {
+        LibraryService service = retrofit.create(LibraryService.class);
+        return service.deleteOrder(oid);
     }
 }

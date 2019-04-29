@@ -5,6 +5,15 @@
     android:layout_height="wrap_content">
 
 
+    <View
+        android:id="@+id/divider"
+        android:layout_width="380dp"
+        android:layout_height="2dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
     <TextView
         android:id="@+id/time_start"
         android:layout_width="wrap_content"
@@ -13,7 +22,7 @@
         android:layout_marginTop="10dp"
         android:text="开始时间："
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/divider" />
 
     <TextView
         android:id="@+id/time_end"
