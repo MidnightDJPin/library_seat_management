@@ -29,7 +29,8 @@
             android:launchMode="singleTop" />
         <activity android:name=".Activity.UpdateActivity" />
         <activity android:name=".Activity.MyOrderActivity" />
-        <activity android:name=".Activity.BanActivity"></activity>
+        <activity android:name=".Activity.BanActivity" />
+        <activity android:name=".Activity.SeatOrderActivity"></activity>
     </application>
 
 </manifest>

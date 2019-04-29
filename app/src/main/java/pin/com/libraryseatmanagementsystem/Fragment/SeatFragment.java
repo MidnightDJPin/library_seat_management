@@ -1,6 +1,7 @@
 package pin.com.libraryseatmanagementsystem.Fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import pin.com.libraryseatmanagementsystem.Activity.SeatOrderActivity;
 import pin.com.libraryseatmanagementsystem.Bean.Reader;
 import pin.com.libraryseatmanagementsystem.Bean.Seat;
 import pin.com.libraryseatmanagementsystem.Interface.OnFragmentInteractionListener;
@@ -234,23 +236,17 @@ public class SeatFragment extends BaseFragment {
     public View.OnClickListener onSeatClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            int vId = v.getId();
             if (reader.getRid() == 0) {
                 Toast.makeText(getActivity(), "请先登陆后再进行相应操作", Toast.LENGTH_SHORT).show();
+            } else if (seats.get(vId - 1).getSstate() == STATUS_DISABLE) {
+                Toast.makeText(getActivity(), "该座位不可用", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(getActivity(), "选择了座位" + v.getId(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), SeatOrderActivity.class);
+                startActivity(intent);
             }
         }
     };
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
 
 }
