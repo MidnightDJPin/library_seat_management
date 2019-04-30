@@ -233,6 +233,12 @@ public class SeatFragment extends BaseFragment {
         mListener = null;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        setSeat();
+    }
+
     public View.OnClickListener onSeatClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {

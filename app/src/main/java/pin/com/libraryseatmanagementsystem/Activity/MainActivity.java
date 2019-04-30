@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
         fragments = new ArrayList<>(3);
         fragments.add(SeatFragment.newInstance(reader));
-        fragments.add(StatusFragment.newInstance("", ""));
+        fragments.add(StatusFragment.newInstance(reader));
         fragments.add(PersonFragment.newInstance(reader));
 
         FragmentManager fm = getSupportFragmentManager();
@@ -153,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         public void onPageSelected(int i) {
             RadioButton radioButton = (RadioButton) radioGroup.getChildAt(i);
             radioButton.setChecked(true);
+            fragments.get(i).refreshReader(reader);
         }
 
         @Override
